@@ -7,30 +7,24 @@ on:
     branches: ["main"]
 
 permissions:
-  contents: read # Necessário para o checkout do código
-  security-events: write # **ESSENCIAL** para enviar os resultados para a aba Security
+  contents: read
+  security-events: write
 
 jobs:
   snyk_code_scan:
     runs-on: ubuntu-latest
     steps:
-      # 1. Baixa o seu código para a pipeline poder analisar
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Prepara a ferramenta de linha de comando do Snyk
       - name: Set up Snyk CLI
         uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
         env:
-          # Usa a secret que você criou no Passo 1
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 3. Roda a análise de código e cria o arquivo de relatório SARIF
-      # O '|| true' garante que a pipeline não falhe se vulnerabilidades forem encontradas
       - name: Run Snyk Code analysis
-        run: snyk code test --sarif-file-output=snyk-code.sarif
+        run: snyk code test --sarif-file-output=snyk-code.sarif --org=vitoria-isabela
 
-      # 4. Envia o relatório para a aba de Segurança do GitHub
       - name: Upload SARIF file to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         with:
