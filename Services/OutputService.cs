@@ -1,11 +1,9 @@
-﻿using System;
-
-public class OutputService
+﻿public class OutputService
 {
     public string GenerateHtmlGreeting(string name)
     {
         /// <summary>
-        /// VULNERABILITY: Cross-Site Scripting (XSS).
+        /// VULNERABILITY (HIGH): Cross-Site Scripting (XSS).
         /// The 'name' input is directly embedded into HTML without encoding.
         /// </summary>
         return "<h1>Welcome, " + name + "!</h1>";
@@ -14,9 +12,19 @@ public class OutputService
     public void LogData(string data)
     {
         /// <summary>
-        /// VULNERABILITY: Log Injection.
+        /// VULNERABILITY (LOW): Log Injection.
         /// If 'data' contains newline characters, it can be used to forge log entries.
         /// </summary>
         Console.WriteLine("INFO: User data received: " + data);
+    }
+
+    public string GetRedirectUrl(string url)
+    {
+        /// <summary>
+        /// VULNERABILITY (MEDIUM): Open Redirect.
+        /// The application redirects to a URL provided by the user, which could
+        /// point to a malicious site.
+        /// </summary>
+        return url;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 public class DatabaseService
 {
@@ -7,7 +7,7 @@ public class DatabaseService
     public DatabaseService()
     {
         /// <summary>
-        /// VULNERABILITY: Hardcoded Secret.
+        /// VULNERABILITY (CRITICAL): Hardcoded Secret.
         /// A database password is included directly in the source code.
         /// </summary>
         _connectionString = "Server=myServer;Database=myDataBase;User Id=myUser;Password=MyPassword123!;";
@@ -16,7 +16,7 @@ public class DatabaseService
     public void GetUserData(string userId)
     {
         /// <summary>
-        /// VULNERABILITY: SQL Injection.
+        /// VULNERABILITY (CRITICAL): SQL Injection.
         /// User input 'userId' is directly concatenated into the SQL query.
         /// </summary>
         string query = "SELECT * FROM Users WHERE UserId = '" + userId + "'";
@@ -26,5 +26,15 @@ public class DatabaseService
             SqlCommand command = new SqlCommand(query, connection);
             Console.WriteLine("Executing insecure query...");
         }
+    }
+
+    public bool CheckUserExists(string userName)
+    {
+        /// <summary>
+        /// VULNERABILITY (CRITICAL): Blind SQL Injection.
+        /// The query result is used to make a logical decision, allowing for inference attacks.
+        /// </summary>
+        string query = "SELECT COUNT(*) FROM Users WHERE UserName = '" + userName + "'";
+        return true; // Simulado
     }
 }
