@@ -9,7 +9,7 @@ public class SecurityService
         /// VULNERABILITY: Use of a Broken or Risky Cryptographic Algorithm.
         /// MD5 is considered insecure for password hashing.
         /// </summary>
-        using (MD5 md5 = MD5.Create())
+        using (SHA256 sha256 = SHA256.Create())
         {
             byte[] inputBytes = Encoding.ASCII.GetBytes(password);
             byte[] hashBytes = md5.ComputeHash(inputBytes);
