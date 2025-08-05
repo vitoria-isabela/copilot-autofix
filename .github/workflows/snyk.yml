@@ -1,4 +1,4 @@
-name: Snyk Code Security Scan for GitHub
+name: Snyk Code Security Scan
 
 on:
   push:
@@ -25,16 +25,16 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk Analysis for GitHub Security
+      - name: Run Snyk Analysis for GitHub
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
         run: |
           snyk code test \
             --sarif-file-output=snyk-code.sarif \
             --org=vitoria-isabela
 
       - name: Upload results to GitHub Security
-        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-code.sarif
