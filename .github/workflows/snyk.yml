@@ -1,8 +1,8 @@
-name: Snyk Code Security Scan
+name: Snyk Security Scan
 
 on:
   push:
-    branches: ["main", "vitoria-snyk-target-branch" ]
+    branches: ["main", "vitoria-snyk-target-branch", "vitoria-snyk-source-branch"]
   pull_request:
     branches: ["main", "vitoria-snyk-target-branch"]
 
@@ -11,7 +11,7 @@ permissions:
   security-events: write
 
 jobs:
-  snyk_security_analysis:
+  snyk_full_analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,7 +25,7 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk Analysis for GitHub
+      - name: Run Snyk Code Scan (for GitHub Security)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         continue-on-error: true
@@ -34,8 +34,17 @@ jobs:
             --sarif-file-output=snyk-code.sarif \
             --org=vitoria-isabela
 
-      - name: Upload results to GitHub Security
+      - name: Upload SAST results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-code.sarif
-          category: Snyk/Code
+      
+      - name: Run Snyk Scan and Monitor (for Snyk.io Dashboard)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+        run: |
+          # O 'snyk test' encontra vulnerabilidades em pacotes (SCA)
+          snyk test --all-projects --org=vitoria-isabela
+          # O 'snyk monitor' envia os resultados de SCA e SAST para o Snyk.io
+          snyk monitor --all-projects --org=vitoria-isabela
