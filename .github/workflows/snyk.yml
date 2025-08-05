@@ -29,8 +29,15 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk code test --sarif-file-output=snyk-code.sarif --org=vitoria-isabela --fail-on=all
-
+      
       - name: Upload SARIF file to GitHub Security
+        if: always() 
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-code.sarif
+
+      - name: Monitor project and upload to Snyk.io
+        if: always()
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk monitor --all-projects --org=vitoria-isabela
