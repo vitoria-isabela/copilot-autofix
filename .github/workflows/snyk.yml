@@ -1,4 +1,4 @@
-name: Snyk Code Security Scan
+name: Snyk Code Security Scan (Debug Mode)
 
 on:
   push:
@@ -25,10 +25,15 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk Analysis and Report to both platforms
+      - name: Run Snyk Analysis with Full Debug
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk code test --report --sarif-file-output=snyk-code.sarif --org=vitoria-isabela --project-name="copilot-autofix"
+        run: |
+          snyk code test -d \
+            --report \
+            --sarif-file-output=snyk-code.sarif \
+            --org=vitoria-isabela \
+            --project-name=${{ github.repository }}
 
       - name: Upload results to GitHub Security
         if: always()
