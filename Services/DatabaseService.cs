@@ -10,7 +10,7 @@ public class DatabaseService
         /// VULNERABILITY (CRITICAL): Hardcoded Secret.
         /// A database password is included directly in the source code.
         /// </summary>
-        _connectionString = "Server=myServer;Database=myDataBase;User Id=myUser;Password=MyPassword123!;";
+        _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
     }
 
     public void GetUserData(string userId)
