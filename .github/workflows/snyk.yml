@@ -28,7 +28,7 @@ jobs:
       # 3. Roda a análise de código e cria o arquivo de relatório SARIF
       # O '|| true' garante que a pipeline não falhe se vulnerabilidades forem encontradas
       - name: Run Snyk Code analysis
-        run: snyk code test --sarif-file-output=snyk-code.sarif || true
+        run: snyk code test --sarif-file-output=snyk-code.sarif
 
       # 4. Envia o relatório para a aba de Segurança do GitHub
       - name: Upload SARIF file to GitHub Security
