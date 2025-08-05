@@ -44,7 +44,5 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         continue-on-error: true
         run: |
-          # O 'snyk test' encontra vulnerabilidades em pacotes (SCA)
           snyk test --all-projects --org=vitoria-isabela
-          # O 'snyk monitor' envia os resultados de SCA e SAST para o Snyk.io
           snyk monitor --all-projects --org=vitoria-isabela
