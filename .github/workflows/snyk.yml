@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  security-events: write 
+  security-events: write
 
 jobs:
   snyk_security_analysis:
@@ -28,7 +28,12 @@ jobs:
       - name: Run Snyk Analysis and Report to both platforms
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk code test --report --sarif-file-output=snyk-code.sarif --org=vitoria-isabela
+        run: >
+          snyk code test 
+          --report 
+          --sarif-file-output=snyk-code.sarif 
+          --org=vitoria-isabela 
+          --project-name=${{ github.repository }}
 
       - name: Upload results to GitHub Security
         if: always()
