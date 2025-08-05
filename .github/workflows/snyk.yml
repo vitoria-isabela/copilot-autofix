@@ -28,7 +28,6 @@ jobs:
       - name: Run Snyk Code analysis
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        continue-on-error: true
         run: snyk code test --sarif-file-output=snyk-code.sarif --org=vitoria-isabela --fail-on=all
 
       - name: Upload SARIF file to GitHub Security
