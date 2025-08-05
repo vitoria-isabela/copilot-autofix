@@ -1,4 +1,4 @@
-name: Snyk Code Security Scan (Debug Mode)
+name: Snyk Code Security Scan for GitHub
 
 on:
   push:
@@ -25,15 +25,13 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk Analysis with Full Debug
+      - name: Run Snyk Analysis for GitHub Security
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          snyk code test -d \
-            --report \
+          snyk code test \
             --sarif-file-output=snyk-code.sarif \
-            --org=vitoria-isabela \
-            --project-name=${{ github.repository }}
+            --org=vitoria-isabela
 
       - name: Upload results to GitHub Security
         if: always()
